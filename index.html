@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#b9a3e8">
+  <title>Gig Ambulance</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    { "imports": { "three": "./js/vendor/three.module.min.js" } }
+  </script>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <canvas id="overlay"></canvas>
+
+  <div id="hud" class="hidden">
+    <div class="hud-top">
+      <div class="pill" id="hud-time"><span class="lbl">TIME</span><span class="val">90</span></div>
+      <div id="nav" class="nav pickup" aria-label="Direction to next stop">
+        <svg id="nav-arrow" viewBox="-50 -50 100 100" width="58" height="58">
+          <circle r="46" class="ring"/>
+          <path d="M0,-36 L24,8 L8,4 L8,30 L-8,30 L-8,4 L-24,8 Z" class="arrow"/>
+        </svg>
+        <div class="nav-txt"><span id="nav-label">PICKUP</span><span id="nav-dist">--</span></div>
+      </div>
+      <div class="pill cash" id="hud-cash"><span class="lbl">$</span><span class="val">0</span></div>
+    </div>
+    <div class="fare" id="hud-fare">
+      <div class="fare-row"><span id="fare-label">Find a patient!</span><span id="fare-timer"></span></div>
+      <div class="bar"><div id="fare-bar"></div></div>
+    </div>
+    <div class="side">
+      <div class="meter"><span>DMG</span><div class="bar v"><div id="dmg-bar"></div></div></div>
+      <div class="meter"><span>SIREN</span><div class="bar v"><div id="boost-bar"></div></div></div>
+    </div>
+    <div id="toasts"></div>
+    <button id="pause-btn" aria-label="Pause">II</button>
+  </div>
+
+  <div id="screen" class="screen">
+    <div class="card">
+      <h1>GIG<br><span>AMBULANCE</span></h1>
+      <p class="tag">Pick up patients. Rush them to the hospital. Don't spill the granny.</p>
+      <ul class="how">
+        <li><b>Left thumb</b> — drag the stick toward where you want to go</li>
+        <li><b>Right thumb</b> — hold for <b>SIREN RUSH</b> boost</li>
+        <li>Stop in the <span class="g">green beam</span> to load, the <span class="r">red beam</span> to deliver</li>
+        <li>Desktop: WASD / arrows, Space = boost</li>
+      </ul>
+      <button id="start-btn" disabled>Loading…</button>
+      <p class="small" id="load-status"></p>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
