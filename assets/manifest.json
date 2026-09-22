@@ -1,0 +1,942 @@
+{
+  "units": "metres",
+  "up": "+Y",
+  "forward": "+Z (glTF front)",
+  "tile_size": 8.0,
+  "assets": [
+    {
+      "name": "char_doctor",
+      "category": "characters",
+      "file": "models/characters/char_doctor.glb",
+      "preview": "previews/char_doctor.png",
+      "description": "Hospital doctor waiting at the ER drop-off.",
+      "size": {
+        "x": 0.73,
+        "y": 1.37,
+        "z": 0.73
+      },
+      "tris": 5324,
+      "nodes": [
+        "head"
+      ]
+    },
+    {
+      "name": "char_medic",
+      "category": "characters",
+      "file": "models/characters/char_medic.glb",
+      "preview": "previews/char_medic.png",
+      "description": "Player driver 'Medi' \u2013 paramedic in teal scrubs and cross cap.",
+      "size": {
+        "x": 0.73,
+        "y": 1.37,
+        "z": 0.82
+      },
+      "tris": 4890,
+      "nodes": [
+        "head"
+      ]
+    },
+    {
+      "name": "char_patient_bandage",
+      "category": "characters",
+      "file": "models/characters/char_patient_bandage.glb",
+      "preview": "previews/char_patient_bandage.png",
+      "description": "Patient in a hospital gown with a head bandage and arm sling.",
+      "size": {
+        "x": 0.73,
+        "y": 1.31,
+        "z": 0.73
+      },
+      "tris": 4508,
+      "nodes": [
+        "head"
+      ]
+    },
+    {
+      "name": "char_patient_granny",
+      "category": "characters",
+      "file": "models/characters/char_patient_granny.glb",
+      "preview": "previews/char_patient_granny.png",
+      "description": "Granny patient with bun, glasses, cardigan and cane.",
+      "size": {
+        "x": 0.79,
+        "y": 1.4,
+        "z": 0.73
+      },
+      "tris": 5232,
+      "nodes": [
+        "head"
+      ]
+    },
+    {
+      "name": "char_patient_kid",
+      "category": "characters",
+      "file": "models/characters/char_patient_kid.glb",
+      "preview": "previews/char_patient_kid.png",
+      "description": "Kid patient with a leg cast and crutch.",
+      "size": {
+        "x": 0.92,
+        "y": 1.31,
+        "z": 0.73
+      },
+      "tris": 5292,
+      "nodes": [
+        "head"
+      ],
+      "scale_hint": 0.85
+    },
+    {
+      "name": "char_pedestrian",
+      "category": "characters",
+      "file": "models/characters/char_pedestrian.glb",
+      "preview": "previews/char_pedestrian.png",
+      "description": "Generic townsperson with a backpack (crowd filler).",
+      "size": {
+        "x": 0.73,
+        "y": 1.31,
+        "z": 0.73
+      },
+      "tris": 5188,
+      "nodes": [
+        "head"
+      ]
+    },
+    {
+      "name": "veh_air_ambulance",
+      "category": "vehicles",
+      "file": "models/vehicles/veh_air_ambulance.glb",
+      "preview": "previews/veh_air_ambulance.png",
+      "description": "Hospital helipad decoration / late-game unlock: bubbly medevac helicopter.",
+      "size": {
+        "x": 4.6,
+        "y": 2.66,
+        "z": 6.45
+      },
+      "tris": 970,
+      "nodes": [
+        "rotor",
+        "siren_l",
+        "tail_rotor"
+      ],
+      "role": "decor"
+    },
+    {
+      "name": "veh_ambulance",
+      "category": "vehicles",
+      "file": "models/vehicles/veh_ambulance.glb",
+      "preview": "previews/veh_ambulance.png",
+      "description": "Player vehicle: chunky box ambulance with light bar, spinning wheels and flashing sirens.",
+      "size": {
+        "x": 2.34,
+        "y": 2.36,
+        "z": 4.4
+      },
+      "tris": 2376,
+      "nodes": [
+        "siren_l",
+        "siren_r",
+        "wheel_fl",
+        "wheel_fr",
+        "wheel_rl",
+        "wheel_rr"
+      ],
+      "role": "player"
+    },
+    {
+      "name": "veh_bus",
+      "category": "vehicles",
+      "file": "models/vehicles/veh_bus.glb",
+      "preview": "previews/veh_bus.png",
+      "description": "Traffic: big slow city bus \u2013 a moving wall to weave around.",
+      "size": {
+        "x": 2.48,
+        "y": 2.86,
+        "z": 6.67
+      },
+      "tris": 1876,
+      "nodes": [
+        "wheel_fl",
+        "wheel_fr",
+        "wheel_rl",
+        "wheel_rr"
+      ],
+      "role": "traffic"
+    },
+    {
+      "name": "veh_car_blue",
+      "category": "vehicles",
+      "file": "models/vehicles/veh_car_blue.glb",
+      "preview": "previews/veh_car_blue.png",
+      "description": "Traffic: rounded bubble hatchback (sky blue).",
+      "size": {
+        "x": 2.02,
+        "y": 1.76,
+        "z": 3.1
+      },
+      "tris": 1608,
+      "nodes": [
+        "wheel_fl",
+        "wheel_fr",
+        "wheel_rl",
+        "wheel_rr"
+      ],
+      "role": "traffic"
+    },
+    {
+      "name": "veh_car_pink",
+      "category": "vehicles",
+      "file": "models/vehicles/veh_car_pink.glb",
+      "preview": "previews/veh_car_pink.png",
+      "description": "Traffic: rounded bubble hatchback (pink).",
+      "size": {
+        "x": 2.02,
+        "y": 1.76,
+        "z": 3.1
+      },
+      "tris": 1608,
+      "nodes": [
+        "wheel_fl",
+        "wheel_fr",
+        "wheel_rl",
+        "wheel_rr"
+      ],
+      "role": "traffic"
+    },
+    {
+      "name": "veh_moto_medic",
+      "category": "vehicles",
+      "file": "models/vehicles/veh_moto_medic.glb",
+      "preview": "previews/veh_moto_medic.png",
+      "description": "Unlockable: nimble paramedic scooter with a med-box \u2013 faster turning, lower top speed.",
+      "size": {
+        "x": 1.02,
+        "y": 1.81,
+        "z": 2.2
+      },
+      "tris": 1274,
+      "nodes": [
+        "siren_l",
+        "wheel_f",
+        "wheel_r"
+      ],
+      "role": "player_alt"
+    },
+    {
+      "name": "veh_pickup",
+      "category": "vehicles",
+      "file": "models/vehicles/veh_pickup.glb",
+      "preview": "previews/veh_pickup.png",
+      "description": "Traffic: stubby pickup truck with a roll bar.",
+      "size": {
+        "x": 2.3,
+        "y": 2.04,
+        "z": 3.95
+      },
+      "tris": 1612,
+      "nodes": [
+        "wheel_fl",
+        "wheel_fr",
+        "wheel_rl",
+        "wheel_rr"
+      ],
+      "role": "traffic"
+    },
+    {
+      "name": "veh_taxi",
+      "category": "vehicles",
+      "file": "models/vehicles/veh_taxi.glb",
+      "preview": "previews/veh_taxi.png",
+      "description": "Traffic / rival: yellow cab stealing your fares.",
+      "size": {
+        "x": 2.02,
+        "y": 2.02,
+        "z": 3.1
+      },
+      "tris": 2048,
+      "nodes": [
+        "wheel_fl",
+        "wheel_fr",
+        "wheel_rl",
+        "wheel_rr"
+      ],
+      "role": "traffic"
+    },
+    {
+      "name": "bld_apartment",
+      "category": "buildings",
+      "file": "models/buildings/bld_apartment.glb",
+      "preview": "previews/bld_apartment.png",
+      "description": "Pickup spot: 3-storey apartment block with balconies.",
+      "size": {
+        "x": 8.0,
+        "y": 10.63,
+        "z": 8.0
+      },
+      "tris": 3636,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "pickup_spot": [
+        0,
+        -3.2
+      ]
+    },
+    {
+      "name": "bld_cafe",
+      "category": "buildings",
+      "file": "models/buildings/bld_cafe.glb",
+      "preview": "previews/bld_cafe.png",
+      "description": "Pickup spot: corner caf\u00e9 with striped awning and giant coffee-cup sign.",
+      "size": {
+        "x": 8.0,
+        "y": 6.14,
+        "z": 8.1
+      },
+      "tris": 1738,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "pickup_spot": [
+        0,
+        -3.2
+      ]
+    },
+    {
+      "name": "bld_hospital",
+      "category": "buildings",
+      "file": "models/buildings/bld_hospital.glb",
+      "preview": "previews/bld_hospital.png",
+      "description": "Main drop-off: two-tile hospital with ER canopy, big red-cross sign and rooftop helipad.",
+      "size": {
+        "x": 16.43,
+        "y": 9.22,
+        "z": 8.35
+      },
+      "tris": 5112,
+      "nodes": [],
+      "tile": [
+        2,
+        1
+      ],
+      "dropoff": true,
+      "dropoff_spot": [
+        0,
+        -3.4
+      ]
+    },
+    {
+      "name": "bld_house_lilac",
+      "category": "buildings",
+      "file": "models/buildings/bld_house_lilac.glb",
+      "preview": "previews/bld_house_lilac.png",
+      "description": "Pickup spot: lilac cottage with a purple roof.",
+      "size": {
+        "x": 8.0,
+        "y": 5.57,
+        "z": 8.0
+      },
+      "tris": 1432,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "pickup_spot": [
+        0,
+        -3.2
+      ]
+    },
+    {
+      "name": "bld_house_peach",
+      "category": "buildings",
+      "file": "models/buildings/bld_house_peach.glb",
+      "preview": "previews/bld_house_peach.png",
+      "description": "Pickup spot: peach cottage with a green roof.",
+      "size": {
+        "x": 8.0,
+        "y": 5.57,
+        "z": 8.0
+      },
+      "tris": 1432,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "pickup_spot": [
+        0,
+        -3.2
+      ]
+    },
+    {
+      "name": "bld_lighthouse",
+      "category": "buildings",
+      "file": "models/buildings/bld_lighthouse.glb",
+      "preview": "previews/bld_lighthouse.png",
+      "description": "Landmark pickup: candy-striped lighthouse at the pier.",
+      "size": {
+        "x": 8.0,
+        "y": 11.02,
+        "z": 8.0
+      },
+      "tris": 1482,
+      "nodes": [
+        "lamp"
+      ],
+      "tile": [
+        1,
+        1
+      ],
+      "pickup_spot": [
+        0,
+        -3.2
+      ]
+    },
+    {
+      "name": "bld_office",
+      "category": "buildings",
+      "file": "models/buildings/bld_office.glb",
+      "preview": "previews/bld_office.png",
+      "description": "Pickup spot / landmark: glassy office tower.",
+      "size": {
+        "x": 8.0,
+        "y": 16.19,
+        "z": 8.0
+      },
+      "tris": 1184,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "pickup_spot": [
+        0,
+        -3.2
+      ]
+    },
+    {
+      "name": "bld_pharmacy",
+      "category": "buildings",
+      "file": "models/buildings/bld_pharmacy.glb",
+      "preview": "previews/bld_pharmacy.png",
+      "description": "Drop-off (meds runs) & pickup: pharmacy with glowing green cross.",
+      "size": {
+        "x": 8.0,
+        "y": 5.28,
+        "z": 8.0
+      },
+      "tris": 952,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "pickup_spot": [
+        0,
+        -3.2
+      ],
+      "dropoff": true
+    },
+    {
+      "name": "lot_grass",
+      "category": "streets",
+      "file": "models/streets/lot_grass.glb",
+      "preview": "previews/lot_grass.png",
+      "description": "Empty grass lot (filler / future building).",
+      "size": {
+        "x": 8.0,
+        "y": 0.78,
+        "z": 8.0
+      },
+      "tris": 92,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "lot_park",
+      "category": "streets",
+      "file": "models/streets/lot_park.glb",
+      "preview": "previews/lot_park.png",
+      "description": "Park lot: paths, fountain, pines, benches \u2013 shortcut through (bumpy!).",
+      "size": {
+        "x": 8.02,
+        "y": 4.06,
+        "z": 8.05
+      },
+      "tris": 1310,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "drivable": true
+    },
+    {
+      "name": "road_corner",
+      "category": "streets",
+      "file": "models/streets/road_corner.glb",
+      "preview": "previews/road_corner.png",
+      "description": "90 deg corner, N-E. Prime drift spot.",
+      "size": {
+        "x": 8.0,
+        "y": 0.48,
+        "z": 8.0
+      },
+      "tris": 420,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "EN"
+    },
+    {
+      "name": "road_cross",
+      "category": "streets",
+      "file": "models/streets/road_cross.glb",
+      "preview": "previews/road_cross.png",
+      "description": "Four-way crossroads with zebra crossings.",
+      "size": {
+        "x": 8.0,
+        "y": 0.48,
+        "z": 8.0
+      },
+      "tris": 668,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "ENSW"
+    },
+    {
+      "name": "road_crosswalk",
+      "category": "streets",
+      "file": "models/streets/road_crosswalk.glb",
+      "preview": "previews/road_crosswalk.png",
+      "description": "Straight road with zebra crossing (pedestrians spawn here).",
+      "size": {
+        "x": 8.0,
+        "y": 0.48,
+        "z": 8.0
+      },
+      "tris": 444,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "NS"
+    },
+    {
+      "name": "road_end",
+      "category": "streets",
+      "file": "models/streets/road_end.glb",
+      "preview": "previews/road_end.png",
+      "description": "Dead end, open to the N.",
+      "size": {
+        "x": 8.0,
+        "y": 0.48,
+        "z": 8.0
+      },
+      "tris": 392,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "N"
+    },
+    {
+      "name": "road_straight",
+      "category": "streets",
+      "file": "models/streets/road_straight.glb",
+      "preview": "previews/road_straight.png",
+      "description": "Straight road, N-S.",
+      "size": {
+        "x": 8.0,
+        "y": 0.48,
+        "z": 8.0
+      },
+      "tris": 396,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "NS"
+    },
+    {
+      "name": "road_t",
+      "category": "streets",
+      "file": "models/streets/road_t.glb",
+      "preview": "previews/road_t.png",
+      "description": "T-junction, open N/E/W.",
+      "size": {
+        "x": 8.0,
+        "y": 0.48,
+        "z": 8.0
+      },
+      "tris": 400,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "ENW"
+    },
+    {
+      "name": "prop_barrier",
+      "category": "props",
+      "file": "models/props/prop_barrier.glb",
+      "preview": "previews/prop_barrier.png",
+      "description": "Road-works barrier (smashable).",
+      "size": {
+        "x": 2.1,
+        "y": 1.3,
+        "z": 0.6
+      },
+      "tris": 368,
+      "nodes": [],
+      "smashable": true
+    },
+    {
+      "name": "prop_bench",
+      "category": "props",
+      "file": "models/props/prop_bench.glb",
+      "preview": "previews/prop_bench.png",
+      "description": "Park bench (smashable).",
+      "size": {
+        "x": 1.6,
+        "y": 0.9,
+        "z": 0.53
+      },
+      "tris": 308,
+      "nodes": [],
+      "smashable": true
+    },
+    {
+      "name": "prop_bin",
+      "category": "props",
+      "file": "models/props/prop_bin.glb",
+      "preview": "previews/prop_bin.png",
+      "description": "Street bin (smashable \u2013 litter confetti!).",
+      "size": {
+        "x": 0.76,
+        "y": 1.07,
+        "z": 0.8
+      },
+      "tris": 122,
+      "nodes": [],
+      "smashable": true
+    },
+    {
+      "name": "prop_bush",
+      "category": "props",
+      "file": "models/props/prop_bush.glb",
+      "preview": "previews/prop_bush.png",
+      "description": "Clump of bush blobs for lot edges.",
+      "size": {
+        "x": 1.25,
+        "y": 0.72,
+        "z": 0.78
+      },
+      "tris": 60,
+      "nodes": []
+    },
+    {
+      "name": "prop_cone",
+      "category": "props",
+      "file": "models/props/prop_cone.glb",
+      "preview": "previews/prop_cone.png",
+      "description": "Traffic cone \u2013 bonk it for style points.",
+      "size": {
+        "x": 0.6,
+        "y": 0.88,
+        "z": 0.6
+      },
+      "tris": 116,
+      "nodes": [],
+      "smashable": true
+    },
+    {
+      "name": "prop_fence",
+      "category": "props",
+      "file": "models/props/prop_fence.glb",
+      "preview": "previews/prop_fence.png",
+      "description": "4 m green railing (cozy-town style) for parks and terraces.",
+      "size": {
+        "x": 4.14,
+        "y": 1.32,
+        "z": 0.24
+      },
+      "tris": 412,
+      "nodes": []
+    },
+    {
+      "name": "prop_guard_rail",
+      "category": "props",
+      "file": "models/props/prop_guard_rail.glb",
+      "preview": "previews/prop_guard_rail.png",
+      "description": "4 m rounded guard rail on a striped curb; tile along lot edges / tracks.",
+      "size": {
+        "x": 4.49,
+        "y": 1.01,
+        "z": 0.56
+      },
+      "tris": 632,
+      "nodes": []
+    },
+    {
+      "name": "prop_hydrant",
+      "category": "props",
+      "file": "models/props/prop_hydrant.glb",
+      "preview": "previews/prop_hydrant.png",
+      "description": "Fire hydrant \u2013 knocking it over sprays a water geyser.",
+      "size": {
+        "x": 0.58,
+        "y": 0.98,
+        "z": 0.51
+      },
+      "tris": 226,
+      "nodes": [],
+      "smashable": true
+    },
+    {
+      "name": "prop_lamp_post",
+      "category": "props",
+      "file": "models/props/prop_lamp_post.glb",
+      "preview": "previews/prop_lamp_post.png",
+      "description": "Green street lamp with glowing lantern.",
+      "size": {
+        "x": 0.42,
+        "y": 3.49,
+        "z": 0.42
+      },
+      "tris": 160,
+      "nodes": []
+    },
+    {
+      "name": "prop_ramp",
+      "category": "props",
+      "file": "models/props/prop_ramp.glb",
+      "preview": "previews/prop_ramp.png",
+      "description": "Stunt ramp! Launches the ambulance for air-time bonus (drive toward -Z... er, its back).",
+      "size": {
+        "x": 3.02,
+        "y": 1.1,
+        "z": 3.6
+      },
+      "tris": 100,
+      "nodes": [],
+      "gameplay": "ramp"
+    },
+    {
+      "name": "prop_traffic_light",
+      "category": "props",
+      "file": "models/props/prop_traffic_light.glb",
+      "preview": "previews/prop_traffic_light.png",
+      "description": "Traffic signal on an overhanging arm; lights are separate nodes.",
+      "size": {
+        "x": 0.5,
+        "y": 3.65,
+        "z": 2.2
+      },
+      "tris": 320,
+      "nodes": [
+        "light_amber",
+        "light_green",
+        "light_red"
+      ]
+    },
+    {
+      "name": "prop_tree_pine",
+      "category": "props",
+      "file": "models/props/prop_tree_pine.glb",
+      "preview": "previews/prop_tree_pine.png",
+      "description": "Tiered low-poly pine (reference style). Scale 0.7-1.3 for variety.",
+      "size": {
+        "x": 2.44,
+        "y": 3.58,
+        "z": 2.38
+      },
+      "tris": 84,
+      "nodes": []
+    },
+    {
+      "name": "prop_tree_round",
+      "category": "props",
+      "file": "models/props/prop_tree_round.glb",
+      "preview": "previews/prop_tree_round.png",
+      "description": "Puffy round tree.",
+      "size": {
+        "x": 2.03,
+        "y": 2.9,
+        "z": 1.63
+      },
+      "tris": 84,
+      "nodes": []
+    },
+    {
+      "name": "marker_dropoff",
+      "category": "powerups",
+      "file": "models/powerups/marker_dropoff.glb",
+      "preview": "previews/marker_dropoff.png",
+      "description": "Drop-off zone: red beam + cross. Stop inside to deliver.",
+      "size": {
+        "x": 4.88,
+        "y": 4.0,
+        "z": 4.88
+      },
+      "tris": 516,
+      "nodes": [
+        "icon"
+      ],
+      "effect": "marker"
+    },
+    {
+      "name": "marker_pickup",
+      "category": "powerups",
+      "file": "models/powerups/marker_pickup.glb",
+      "preview": "previews/marker_pickup.png",
+      "description": "Pickup zone: green beam + bobbing arrow. Stop inside to load.",
+      "size": {
+        "x": 4.88,
+        "y": 4.1,
+        "z": 4.88
+      },
+      "tris": 430,
+      "nodes": [
+        "icon"
+      ],
+      "effect": "marker"
+    },
+    {
+      "name": "pu_coin",
+      "category": "powerups",
+      "file": "models/powerups/pu_coin.glb",
+      "preview": "previews/pu_coin.png",
+      "description": "Tip coin: +$5. Chains along roads like breadcrumbs.",
+      "size": {
+        "x": 0.84,
+        "y": 0.84,
+        "z": 0.18
+      },
+      "tris": 280,
+      "nodes": [],
+      "effect": "coin"
+    },
+    {
+      "name": "pu_heart",
+      "category": "powerups",
+      "file": "models/powerups/pu_heart.glb",
+      "preview": "previews/pu_heart.png",
+      "description": "Heart: stabilises the patient (+patience, tip multiplier kept).",
+      "size": {
+        "x": 1.6,
+        "y": 1.53,
+        "z": 1.6
+      },
+      "tris": 288,
+      "nodes": [],
+      "effect": "stabilise"
+    },
+    {
+      "name": "pu_magnet",
+      "category": "powerups",
+      "file": "models/powerups/pu_magnet.glb",
+      "preview": "previews/pu_magnet.png",
+      "description": "Tip magnet: pulls coins in from 8 m for 8 s.",
+      "size": {
+        "x": 1.6,
+        "y": 1.47,
+        "z": 1.6
+      },
+      "tris": 508,
+      "nodes": [],
+      "effect": "magnet"
+    },
+    {
+      "name": "pu_repair",
+      "category": "powerups",
+      "file": "models/powerups/pu_repair.glb",
+      "preview": "previews/pu_repair.png",
+      "description": "Wrench: repairs 35% ambulance damage.",
+      "size": {
+        "x": 1.6,
+        "y": 1.66,
+        "z": 1.6
+      },
+      "tris": 304,
+      "nodes": [],
+      "effect": "repair"
+    },
+    {
+      "name": "pu_shield",
+      "category": "powerups",
+      "file": "models/powerups/pu_shield.glb",
+      "preview": "previews/pu_shield.png",
+      "description": "Bubble bumper: 6 s of crash immunity.",
+      "size": {
+        "x": 1.6,
+        "y": 1.67,
+        "z": 1.6
+      },
+      "tris": 644,
+      "nodes": [],
+      "effect": "shield"
+    },
+    {
+      "name": "pu_star",
+      "category": "powerups",
+      "file": "models/powerups/pu_star.glb",
+      "preview": "previews/pu_star.png",
+      "description": "Star: x2 tip multiplier for the next drop-off.",
+      "size": {
+        "x": 1.6,
+        "y": 1.67,
+        "z": 1.6
+      },
+      "tris": 196,
+      "nodes": [],
+      "effect": "multiplier"
+    },
+    {
+      "name": "pu_time",
+      "category": "powerups",
+      "file": "models/powerups/pu_time.glb",
+      "preview": "previews/pu_time.png",
+      "description": "Alarm clock: +10 s to the current fare's timer.",
+      "size": {
+        "x": 1.6,
+        "y": 1.61,
+        "z": 1.6
+      },
+      "tris": 420,
+      "nodes": [],
+      "effect": "time"
+    },
+    {
+      "name": "pu_turbo",
+      "category": "powerups",
+      "file": "models/powerups/pu_turbo.glb",
+      "preview": "previews/pu_turbo.png",
+      "description": "Siren Rush: 4 s speed boost + traffic parts like the Red Sea.",
+      "size": {
+        "x": 1.6,
+        "y": 1.68,
+        "z": 1.6
+      },
+      "tris": 460,
+      "nodes": [],
+      "effect": "boost"
+    }
+  ]
+}
