@@ -54,6 +54,9 @@ PALETTE = {
     "wall_mint": ("#D3F4E4", 0.9), "wall_sky": ("#D2E9FF", 0.9), "wall_pink": ("#FFDCE6", 0.9),
     "roof_red": ("#E3695B", 0.8), "roof_blue": ("#5E90D8", 0.8), "roof_green": ("#5DBA8B", 0.8),
     "roof_grey": ("#8C92A3", 0.85), "wood": ("#C98E5E", 0.85),
+    # pizza side-gig
+    "kraft": ("#E9C48F", 0.85), "cheese": ("#FFD25C", 0.6), "crust": ("#E0954A", 0.8),
+    "pepperoni": ("#D9483B", 0.6), "basil": ("#3FAE5A", 0.7), "wall_tomato": ("#FFB9A8", 0.9),
     # emissive (these glow in-game; keep strength modest so bloom stays cute, not blinding)
     "lamp": ("#FFF1A8", 0.3, 1.5), "siren_red": ("#FF3D52", 0.3, 2.5),
     "siren_blue": ("#3F7DFF", 0.3, 2.5), "beacon_green": ("#56E27D", 0.3, 1.5),
@@ -62,6 +65,7 @@ PALETTE = {
     "tail": ("#FF4B4B", 0.3, 1.0),
     # translucent
     "beam_green": ("#56E27D", 0.3, 1.0, 0.28), "beam_red": ("#FF5468", 0.3, 1.0, 0.28),
+    "beam_orange": ("#FFA23F", 0.3, 1.0, 0.28), "beacon_orange": ("#FFA23F", 0.3, 1.5),
     "bubble": ("#9FE3FF", 0.1, 0.3, 0.35),
 }
 

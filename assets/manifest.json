@@ -2,7 +2,7 @@
   "units": "metres",
   "up": "+Y",
   "forward": "+Z (glTF front)",
-  "tile_size": 8.0,
+  "tile_size": 16.0,
   "assets": [
     {
       "name": "char_doctor",
@@ -268,11 +268,11 @@
       "preview": "previews/bld_apartment.png",
       "description": "Pickup spot: 3-storey apartment block with balconies.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 10.63,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 3636,
+      "tris": 3648,
       "nodes": [],
       "tile": [
         1,
@@ -290,11 +290,11 @@
       "preview": "previews/bld_cafe.png",
       "description": "Pickup spot: corner caf\u00e9 with striped awning and giant coffee-cup sign.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 6.14,
-        "z": 8.1
+        "z": 16.0
       },
-      "tris": 1738,
+      "tris": 1750,
       "nodes": [],
       "tile": [
         1,
@@ -312,9 +312,9 @@
       "preview": "previews/bld_hospital.png",
       "description": "Main drop-off: two-tile hospital with ER canopy, big red-cross sign and rooftop helipad.",
       "size": {
-        "x": 16.43,
+        "x": 32.0,
         "y": 9.22,
-        "z": 8.35
+        "z": 16.0
       },
       "tris": 5112,
       "nodes": [],
@@ -335,9 +335,9 @@
       "preview": "previews/bld_house_lilac.png",
       "description": "Pickup spot: lilac cottage with a purple roof.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 5.57,
-        "z": 8.0
+        "z": 16.0
       },
       "tris": 1432,
       "nodes": [],
@@ -357,9 +357,9 @@
       "preview": "previews/bld_house_peach.png",
       "description": "Pickup spot: peach cottage with a green roof.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 5.57,
-        "z": 8.0
+        "z": 16.0
       },
       "tris": 1432,
       "nodes": [],
@@ -379,9 +379,9 @@
       "preview": "previews/bld_lighthouse.png",
       "description": "Landmark pickup: candy-striped lighthouse at the pier.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 11.02,
-        "z": 8.0
+        "z": 16.0
       },
       "tris": 1482,
       "nodes": [
@@ -403,11 +403,11 @@
       "preview": "previews/bld_office.png",
       "description": "Pickup spot / landmark: glassy office tower.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 16.19,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 1184,
+      "tris": 1196,
       "nodes": [],
       "tile": [
         1,
@@ -425,11 +425,11 @@
       "preview": "previews/bld_pharmacy.png",
       "description": "Drop-off (meds runs) & pickup: pharmacy with glowing green cross.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 5.28,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 952,
+      "tris": 964,
       "nodes": [],
       "tile": [
         1,
@@ -442,15 +442,77 @@
       "dropoff": true
     },
     {
+      "name": "bld_pizzeria",
+      "category": "buildings",
+      "file": "models/buildings/bld_pizzeria.glb",
+      "preview": "previews/bld_pizzeria.png",
+      "description": "Pizza side-gig hub: grab up to 3 hot pizzas here, even mid-patient-run.",
+      "size": {
+        "x": 16.0,
+        "y": 6.87,
+        "z": 16.0
+      },
+      "tris": 1722,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "pizza_spot": [
+        0,
+        -3.2
+      ]
+    },
+    {
+      "name": "hwy_corner",
+      "category": "streets",
+      "file": "models/streets/hwy_corner.glb",
+      "preview": "previews/hwy_corner.png",
+      "description": "Highway bend N-E with a rounded inside corner.",
+      "size": {
+        "x": 16.0,
+        "y": 1.01,
+        "z": 16.0
+      },
+      "tris": 428,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "EN",
+      "surface": "highway"
+    },
+    {
+      "name": "hwy_straight",
+      "category": "streets",
+      "file": "models/streets/hwy_straight.glb",
+      "preview": "previews/hwy_straight.png",
+      "description": "Highway straight: grass shoulders, no kerbs \u2013 leave the road anywhere.",
+      "size": {
+        "x": 16.0,
+        "y": 1.01,
+        "z": 16.0
+      },
+      "tris": 424,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "NS",
+      "surface": "highway"
+    },
+    {
       "name": "lot_grass",
       "category": "streets",
       "file": "models/streets/lot_grass.glb",
       "preview": "previews/lot_grass.png",
       "description": "Empty grass lot (filler / future building).",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 0.78,
-        "z": 8.0
+        "z": 16.0
       },
       "tris": 92,
       "nodes": [],
@@ -466,11 +528,11 @@
       "preview": "previews/lot_park.png",
       "description": "Park lot: paths, fountain, pines, benches \u2013 shortcut through (bumpy!).",
       "size": {
-        "x": 8.02,
+        "x": 16.0,
         "y": 4.06,
-        "z": 8.05
+        "z": 16.0
       },
-      "tris": 1310,
+      "tris": 2210,
       "nodes": [],
       "tile": [
         1,
@@ -483,19 +545,20 @@
       "category": "streets",
       "file": "models/streets/road_corner.glb",
       "preview": "previews/road_corner.png",
-      "description": "90 deg corner, N-E. Prime drift spot.",
+      "description": "90 deg street corner, N-E.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 0.48,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 420,
+      "tris": 468,
       "nodes": [],
       "tile": [
         1,
         1
       ],
-      "connections": "EN"
+      "connections": "EN",
+      "surface": "street"
     },
     {
       "name": "road_cross",
@@ -504,36 +567,38 @@
       "preview": "previews/road_cross.png",
       "description": "Four-way crossroads with zebra crossings.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 0.48,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 668,
+      "tris": 1004,
       "nodes": [],
       "tile": [
         1,
         1
       ],
-      "connections": "ENSW"
+      "connections": "ENSW",
+      "surface": "street"
     },
     {
       "name": "road_crosswalk",
       "category": "streets",
       "file": "models/streets/road_crosswalk.glb",
       "preview": "previews/road_crosswalk.png",
-      "description": "Straight road with zebra crossing (pedestrians spawn here).",
+      "description": "4-lane street with zebra crossing.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 0.48,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 444,
+      "tris": 600,
       "nodes": [],
       "tile": [
         1,
         1
       ],
-      "connections": "NS"
+      "connections": "NS",
+      "surface": "street"
     },
     {
       "name": "road_end",
@@ -542,36 +607,59 @@
       "preview": "previews/road_end.png",
       "description": "Dead end, open to the N.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 0.48,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 392,
+      "tris": 428,
       "nodes": [],
       "tile": [
         1,
         1
       ],
-      "connections": "N"
+      "connections": "N",
+      "surface": "street"
+    },
+    {
+      "name": "road_roundabout",
+      "category": "streets",
+      "file": "models/streets/road_roundabout.glb",
+      "preview": "previews/road_roundabout.png",
+      "description": "Double-lane roundabout with a hoppable grass island.",
+      "size": {
+        "x": 16.0,
+        "y": 1.33,
+        "z": 16.0
+      },
+      "tris": 2220,
+      "nodes": [],
+      "tile": [
+        1,
+        1
+      ],
+      "connections": "ENSW",
+      "surface": "street",
+      "island_r": 2.45
     },
     {
       "name": "road_straight",
       "category": "streets",
       "file": "models/streets/road_straight.glb",
       "preview": "previews/road_straight.png",
-      "description": "Straight road, N-S.",
+      "description": "4-lane street, N-S.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 0.48,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 396,
+      "tris": 492,
       "nodes": [],
       "tile": [
         1,
         1
       ],
-      "connections": "NS"
+      "connections": "NS",
+      "surface": "street"
     },
     {
       "name": "road_t",
@@ -580,17 +668,18 @@
       "preview": "previews/road_t.png",
       "description": "T-junction, open N/E/W.",
       "size": {
-        "x": 8.0,
+        "x": 16.0,
         "y": 0.48,
-        "z": 8.0
+        "z": 16.0
       },
-      "tris": 400,
+      "tris": 508,
       "nodes": [],
       "tile": [
         1,
         1
       ],
-      "connections": "ENW"
+      "connections": "ENW",
+      "surface": "street"
     },
     {
       "name": "prop_barrier",
@@ -724,6 +813,34 @@
       "nodes": []
     },
     {
+      "name": "prop_palm",
+      "category": "props",
+      "file": "models/props/prop_palm.glb",
+      "preview": "previews/prop_palm.png",
+      "description": "Beach palm with a curvy trunk and coconuts (breaks away).",
+      "size": {
+        "x": 3.12,
+        "y": 3.99,
+        "z": 2.91
+      },
+      "tris": 492,
+      "nodes": []
+    },
+    {
+      "name": "prop_pizza_box",
+      "category": "props",
+      "file": "models/props/prop_pizza_box.glb",
+      "preview": "previews/prop_pizza_box.png",
+      "description": "Pizza box: stacks on the ambulance roof while you carry pizza orders.",
+      "size": {
+        "x": 0.8,
+        "y": 0.17,
+        "z": 0.8
+      },
+      "tris": 112,
+      "nodes": []
+    },
+    {
       "name": "prop_ramp",
       "category": "props",
       "file": "models/props/prop_ramp.glb",
@@ -785,6 +902,20 @@
       "nodes": []
     },
     {
+      "name": "prop_umbrella",
+      "category": "props",
+      "file": "models/props/prop_umbrella.glb",
+      "preview": "previews/prop_umbrella.png",
+      "description": "Striped beach umbrella + towel (sends sand flying).",
+      "size": {
+        "x": 2.42,
+        "y": 2.46,
+        "z": 2.46
+      },
+      "tris": 176,
+      "nodes": []
+    },
+    {
       "name": "marker_dropoff",
       "category": "powerups",
       "file": "models/powerups/marker_dropoff.glb",
@@ -813,6 +944,23 @@
         "z": 4.88
       },
       "tris": 430,
+      "nodes": [
+        "icon"
+      ],
+      "effect": "marker"
+    },
+    {
+      "name": "marker_pizza",
+      "category": "powerups",
+      "file": "models/powerups/marker_pizza.glb",
+      "preview": "previews/marker_pizza.png",
+      "description": "Pizza zone: orange beam + spinning slice. Roll through (no full stop needed).",
+      "size": {
+        "x": 4.88,
+        "y": 4.04,
+        "z": 4.88
+      },
+      "tris": 672,
       "nodes": [
         "icon"
       ],

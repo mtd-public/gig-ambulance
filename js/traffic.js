@@ -1,10 +1,11 @@
 import { spawn } from './assets.js';
-import { Town } from './town.js';
+import { LANES, RING_R, Town } from './town.js';
 import { clamp, damp, pick, wrapAngle } from './utils.js';
 
 export const TRAFFIC_ASSETS = ['veh_car_pink', 'veh_car_blue', 'veh_taxi', 'veh_pickup', 'veh_bus'];
-const LANE = 1.25;
 const right = (d) => { const [dx, dz] = Town.dirVec(d); return [-dz, dx]; };
+// Map-angle (anticlockwise from east, north = +90) of each arm of a junction.
+const ARM_ANG = { E: 0, N: 90, W: 180, S: 270 };
 
 class Car {
   constructor(scene, town, model) {
@@ -15,15 +16,17 @@ class Car {
     this.wheels = ['wheel_fl', 'wheel_fr', 'wheel_rl', 'wheel_rr'].map((n) => this.mesh.getObjectByName(n)).filter(Boolean);
     this.isBus = model === 'veh_bus';
     this.radius = this.isBus ? 1.6 : 1.2;
-    this.cruise = this.isBus ? 6 : 7.5 + Math.random() * 2.5;
+    this.baseCruise = this.isBus ? 7 : 8 + Math.random() * 3;
+    this.cruise = this.baseCruise;
     this.nearMissCd = 0;
   }
 
   spawnAt(cell, dir) {
     this.cell = cell; this.dirIn = dir;
     this.knocked = false; this.knockT = 0;
+    this.lane = this.isBus ? LANES[1] : pick(LANES); // buses hug the kerb lane
     const [rx, rz] = right(dir);
-    this.x = cell.x + rx * LANE; this.z = cell.z + rz * LANE; this.y = 0;
+    this.x = cell.x + rx * this.lane; this.z = cell.z + rz * this.lane; this.y = 0;
     const [dx, dz] = Town.dirVec(dir);
     this.heading = Math.atan2(dx, dz);
     this.speed = this.cruise;
@@ -37,11 +40,28 @@ class Car {
     const back = Town.opposite(this.dirIn);
     const opts = [...this.cell.conn].filter((d) => d !== back);
     const out = opts.length ? pick(opts) : back;
-    const [r1x, r1z] = right(this.dirIn), [r2x, r2z] = right(out);
-    const perp = r1x * r2x + r1z * r2z === 0;
-    const k = perp ? 1 : 0.5;
-    this.wp = { x: this.cell.x + (r1x + r2x) * LANE * k, z: this.cell.z + (r1z + r2z) * LANE * k };
     this.dirOut = out;
+    if (this.cell.roundabout) {
+      // Circulate anticlockwise (right-hand traffic) from the entry arm to the exit arm.
+      const R = RING_R[this.lane];
+      const a0 = ARM_ANG[Town.opposite(this.dirIn)];
+      let a1 = ARM_ANG[out];
+      while (a1 <= a0 + 1) a1 += 360;
+      this.path = [];
+      for (let a = a0 + 28; a <= a1 - 28 + 0.1; a += 30) {
+        const r = (a * Math.PI) / 180;
+        this.path.push({ x: this.cell.x + R * Math.cos(r), z: this.cell.z - R * Math.sin(r) });
+      }
+      if (!this.path.length) {
+        const r = (((a0 + a1) / 2) * Math.PI) / 180;
+        this.path.push({ x: this.cell.x + R * Math.cos(r), z: this.cell.z - R * Math.sin(r) });
+      }
+    } else {
+      const [r1x, r1z] = right(this.dirIn), [r2x, r2z] = right(out);
+      const k = r1x * r2x + r1z * r2z === 0 ? 1 : 0.5; // perpendicular turn vs straight
+      this.path = [{ x: this.cell.x + (r1x + r2x) * this.lane * k, z: this.cell.z + (r1z + r2z) * this.lane * k }];
+    }
+    this.cruise = this.cell.onHwyLine ? this.baseCruise * 1.45 : this.baseCruise; // faster on highways
   }
 
   update(dt, cars, player) {
@@ -60,17 +80,20 @@ class Car {
     check(player.pos.x, player.pos.z, player.radius);
     this.speed = damp(this.speed, clamp(want, 0, this.cruise), 4, dt);
 
-    const dx = this.wp.x - this.x, dz = this.wp.z - this.z;
+    const wp = this.path[0];
+    const dx = wp.x - this.x, dz = wp.z - this.z;
     const dist = Math.hypot(dx, dz);
-    if (dist < 1.0) {
-      const next = this.town.neighbor(this.cell, this.dirOut);
-      if (next?.type === 'road') { this.cell = next; this.dirIn = this.dirOut; }
-      else { this.dirIn = Town.opposite(this.dirOut); }
-      this._pickNext();
+    if (dist < 1.2) {
+      this.path.shift();
+      if (!this.path.length) {
+        const next = this.town.neighbor(this.cell, this.dirOut);
+        if (next?.type === 'road') { this.cell = next; this.dirIn = this.dirOut; } else { this.dirIn = Town.opposite(this.dirOut); }
+        this._pickNext();
+      }
     } else {
       const target = Math.atan2(dx, dz);
       const turn = wrapAngle(target - this.heading);
-      this.heading = wrapAngle(this.heading + clamp(turn, -2.6 * dt, 2.6 * dt));
+      this.heading = wrapAngle(this.heading + clamp(turn, -3.0 * dt, 3.0 * dt));
     }
     this.x += Math.sin(this.heading) * this.speed * dt;
     this.z += Math.cos(this.heading) * this.speed * dt;

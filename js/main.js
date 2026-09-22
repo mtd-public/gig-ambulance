@@ -1,19 +1,22 @@
 import * as THREE from 'three';
 import { loadAssets } from './assets.js';
 import { Sfx } from './audio.js';
+import { BREAKABLE_ASSETS, Breakables } from './breakables.js';
 import { FARE_ASSETS, Fares, makeGuideArrow } from './fares.js';
 import { FX } from './fx.js';
 import { Hud } from './hud.js';
 import { InputManager } from './input.js';
 import { PICKUP_ASSETS, Pickups } from './pickups.js';
+import { PIZZA_ASSETS, Pizza } from './pizza.js';
 import { Ambulance } from './player.js';
 import { TOWN_ASSETS, Town } from './town.js';
 import { TRAFFIC_ASSETS, Traffic } from './traffic.js';
 import { damp } from './utils.js';
 
 const GAME_TIME = 90;
-const VIEW = 13; // half of the shorter screen dimension, in metres
-const CAM_YAW = Math.PI / 4, CAM_PITCH = THREE.MathUtils.degToRad(52);
+const VIEW = 15; // half of the shorter screen dimension, in metres
+const CAM_PITCH = THREE.MathUtils.degToRad(52);
+let camYaw = Math.PI / 4, camYawTarget = camYaw; // rotate in 90 deg steps with the ⟳ button / Q / E
 
 // ---------- renderer / scene / camera ----------
 const canvas = document.getElementById('game');
@@ -35,14 +38,19 @@ sun.shadow.normalBias = 0.04;
 scene.add(sun, sun.target);
 const SUN_OFFSET = new THREE.Vector3(-22, 45, 14);
 
-const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 400);
-const CAM_OFFSET = new THREE.Vector3(
-  Math.sin(CAM_YAW) * Math.cos(CAM_PITCH), Math.sin(CAM_PITCH), Math.cos(CAM_YAW) * Math.cos(CAM_PITCH),
-).multiplyScalar(120);
-
-// Stick -> world: screen right and screen up projected onto the ground.
-const SCREEN_RIGHT = new THREE.Vector2(Math.cos(CAM_YAW), -Math.sin(CAM_YAW));
-const SCREEN_UP = new THREE.Vector2(-Math.sin(CAM_YAW), -Math.cos(CAM_YAW));
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 500);
+const CAM_OFFSET = new THREE.Vector3();
+// Stick -> world: screen right and screen up projected onto the ground (follow the camera yaw).
+const SCREEN_RIGHT = new THREE.Vector2();
+const SCREEN_UP = new THREE.Vector2();
+function applyCamYaw() {
+  CAM_OFFSET.set(Math.sin(camYaw) * Math.cos(CAM_PITCH), Math.sin(CAM_PITCH), Math.cos(camYaw) * Math.cos(CAM_PITCH))
+    .multiplyScalar(140);
+  SCREEN_RIGHT.set(Math.cos(camYaw), -Math.sin(camYaw));
+  SCREEN_UP.set(-Math.sin(camYaw), -Math.cos(camYaw));
+}
+applyCamYaw();
+function rotateCamera(dir = 1) { camYawTarget += (dir * Math.PI) / 2; }
 
 function resize() {
   const w = innerWidth, h = innerHeight;
@@ -59,7 +67,12 @@ function resize() {
 const input = new InputManager(canvas);
 const hud = new Hud(document.getElementById('overlay'));
 const sfx = new Sfx();
-let town, player, traffic, fares, pickups, fx, guide;
+let town, player, traffic, fares, pickups, pizza, breakables, fx, guide;
+input.bindButton(document.getElementById('btn-drift'), 'drift');
+input.bindButton(document.getElementById('btn-brake'), 'brake');
+input.bindButton(document.getElementById('btn-boost'), 'boost');
+document.getElementById('rot-btn').addEventListener('click', () => rotateCamera(1));
+input.onKey = (k) => { if (k === 'q') rotateCamera(-1); else if (k === 'e') rotateCamera(1); };
 const state = { mode: 'loading', time: GAME_TIME, cash: 0, deliveries: 0, bestCombo: 0, starMult: 1 };
 const camFocus = new THREE.Vector3();
 window.addEventListener('resize', resize);
@@ -68,7 +81,8 @@ resize();
 async function boot() {
   const status = document.getElementById('load-status');
   const btn = document.getElementById('start-btn');
-  const names = [...new Set(['veh_ambulance', ...TOWN_ASSETS, ...TRAFFIC_ASSETS, ...FARE_ASSETS, ...PICKUP_ASSETS])];
+  const names = [...new Set(['veh_ambulance', ...TOWN_ASSETS, ...TRAFFIC_ASSETS, ...FARE_ASSETS, ...PICKUP_ASSETS,
+    ...PIZZA_ASSETS, ...BREAKABLE_ASSETS, 'prop_palm', 'prop_umbrella'])];
   try {
     await loadAssets(names, (d, n) => { status.textContent = `Loading models ${d}/${n}`; });
   } catch (err) {
@@ -77,8 +91,10 @@ async function boot() {
   }
   town = new Town(scene, 7);
   player = new Ambulance(scene, town);
-  traffic = new Traffic(scene, town, 14);
+  breakables = new Breakables(scene, town.breakables);
+  traffic = new Traffic(scene, town, 26);
   fares = new Fares(scene, town);
+  pizza = new Pizza(scene, town);
   pickups = new Pickups(scene, town);
   fx = new FX(scene);
   guide = makeGuideArrow();
@@ -99,6 +115,7 @@ function resetRun() {
   state.time = GAME_TIME; state.cash = 0; state.deliveries = 0; state.starMult = 1;
   state.combo = 0; state.bestCombo = 0;
   fares.fill(player);
+  pizza.fill(player);
   camFocus.set(player.pos.x, 0, player.pos.z);
 }
 
@@ -113,6 +130,7 @@ function start() {
 document.getElementById('pause-btn').addEventListener('click', () => {
   if (state.mode !== 'playing') return;
   state.mode = 'paused';
+  input.reset();
   sfx.setSiren(false);
   showCard(`<h1>PAUSED</h1><p class="tag">Take a breather, medic.</p><button id="resume">RESUME</button>`);
   document.getElementById('resume').onclick = () => {
@@ -129,6 +147,7 @@ function showCard(html) {
 
 function gameOver() {
   state.mode = 'over';
+  input.reset();
   sfx.setSiren(false);
   hud.show(false);
   showCard(`<h1>SHIFT<br><span>OVER</span></h1>
@@ -160,8 +179,20 @@ function handleEvents(events) {
         sfx.crash(); fx.shake = Math.min(1, e.impact / 18);
         fares.onCrash();
         if (fares.current) hud.toast('OUCH! Tip -20%', 'bad');
+        if (e.impact > 9) pizza.onCrash(player, events);
         state.combo = 0;
         break;
+      case 'pizzaGrab':
+        sfx.coin(); fx.sparkle(e.x, 0, e.z, 8);
+        hud.toast(`🍕 Pizza ${e.count}/3`, 'good');
+        break;
+      case 'pizzaDrop':
+        state.cash += e.pay; sfx.deliver(); fx.confetti(e.x, 0, e.z, 25);
+        hud.toast(`🍕 ×${e.count} delivered${e.hot === e.count ? ' — piping hot!' : ''} +$${e.pay}`, 'good');
+        state.time += 2 * e.hot;
+        if (e.hot) hud.float(`+${2 * e.hot}s`, e.x, 4, e.z, '#e07b12');
+        break;
+      case 'pizzaLost': sfx.bonk(); hud.toast('A pizza flew off the roof!', 'bad'); break;
       case 'bonk': sfx.bonk(); break;
       case 'land':
         fx.dust(player.pos.x, 0, player.pos.z, 8, 2);
@@ -171,9 +202,9 @@ function handleEvents(events) {
         sfx.crash(); fx.shake = 0.5; fx.dust(e.x, 0, e.z, 6, 2);
         bumpCombo('BONK!', e.x, e.z);
         break;
-      case 'bump': sfx.bonk(); fx.shake = 0.3; state.combo = 0; if (fares.current) fares.onCrash(); break;
+      case 'bump': sfx.bonk(); fx.shake = 0.3; state.combo = 0; break;
       case 'nearMiss': bumpCombo('NEAR MISS', e.x, e.z); break;
-      case 'smashProp': sfx.bonk(); fx.dust(e.x, 0, e.z, 3, 1); earn(1, e.x, e.z, 'SMASH'); break;
+      case 'smashProp': sfx.bonk(); fx.dust(e.x, 0.2, e.z, 4, 1.2); earn(1, e.x, e.z, 'SMASH'); break;
       case 'power': applyPower(e); break;
       case 'load':
         sfx.load(); fx.sparkle(e.x, 0, e.z, 14);
@@ -240,10 +271,12 @@ function loop(now) {
       const n = Math.hypot(wx, wz) || 1;
       ctl = { x: wx / n, z: wz / n, mag: raw.mag };
     }
-    player.update(dt, ctl, input.boost, t);
+    player.update(dt, ctl, { boost: input.boost, drift: input.drift, brake: input.brake }, t);
     const events = player.events.splice(0);
     events.push(...traffic.update(dt, player));
+    breakables.update(dt, player, events);
     fares.update(dt, t, player, events);
+    pizza.update(dt, t, player, events);
     pickups.update(dt, t, player, events);
     handleEvents(events);
     if (player.drifting && player.speed > 8 && !player.airborne) {
@@ -253,6 +286,10 @@ function loop(now) {
       }
     } else player._driftAwarded = false;
     if (player.boosting && Math.random() < 0.5) fx.dust(player.pos.x, 0, player.pos.z, 1, 1);
+    const loose = player.surface === 'sand' || player.surface === 'water' || player.surface === 'grass';
+    if (loose && player.speed > 7 && !player.airborne && Math.random() < 0.35) {
+      fx.dust(player.pos.x, player.y, player.pos.z, 1, 1.6); // kicked-up sand / spray / grass
+    }
     if (state.comboT > 0 && (state.comboT -= dt) <= 0) state.combo = 0;
     state.time -= dt;
     sfx.setSiren(player.sirenOn);
@@ -265,6 +302,9 @@ function loop(now) {
 
   if (player) {
     fx.update(dt);
+    town.update(t);
+    // Ease the camera yaw toward its 90-degree step.
+    if (Math.abs(camYawTarget - camYaw) > 1e-4) { camYaw = damp(camYaw, camYawTarget, 7, dt); applyCamYaw(); }
     // Camera: follow with look-ahead along velocity, plus crash shake.
     const ahead = new THREE.Vector3(player.pos.x + player.vel.x * 0.45, 0, player.pos.z + player.vel.y * 0.45);
     camFocus.x = damp(camFocus.x, ahead.x, 4, dt);
@@ -287,8 +327,9 @@ function loop(now) {
     }
     hud.update(dt, {
       time: state.time, cash: state.cash, damage: player.damage, boost: player.boost,
-      fare: fares.current && { ...fares.current, label: 'To the hospital!' },
+      fare: fares.current && { ...fares.current, label: fares.current.dest.name },
       waiting: fares.waiting.length, navTarget: target, px: player.pos.x, pz: player.pos.z,
+      pizza: { count: pizza.count, minTime: pizza.minTime }, pizzaTarget: pizza.nearestTarget(player.pos),
     }, camera, input);
   }
   renderer.render(scene, camera);
@@ -298,4 +339,6 @@ boot();
 
 // Debug handle for poking at the prototype from the console.
 window.GIG = { get state() { return state; }, get player() { return player; }, get town() { return town; },
-  get fares() { return fares; }, scene, camera };
+  get fares() { return fares; }, get pizza() { return pizza; }, get traffic() { return traffic; },
+  get inputState() { return { active: input.stickActive, dir: input.hasDirection }; },
+  rotateCamera, scene, camera };

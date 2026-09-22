@@ -53,7 +53,57 @@ def bench_at(m, x=0.0, y=0.0, z=0.0):
         m.mirror_x(lambda: box(0.08, 0.5, 0.45, 0.02), "trim_green", (0.7, 0.0, 0.225))
 
 
+def pizza_slice_at(m, x, y, z, size=1.0, group="body", rot=(90, 0, 0)):
+    """Upright pizza slice (tip down), facing -Y: cheese wedge, crust, pepperoni."""
+    s = size
+    m.add(prism([(0, 0), (0.62 * s, 1.25 * s), (-0.62 * s, 1.25 * s)], 0.16 * s), "cheese", (x, y, z),
+          rot=rot, group=group)
+    m.add(box(1.45 * s, 0.24 * s, 0.26 * s, 0.1 * s, 2), "crust", (x, y, z + 1.3 * s), group=group)
+    for px, pz in ((0.0, 0.45), (-0.24, 0.9), (0.26, 0.85)):
+        m.add(cyl(0.14 * s, 0.24 * s, 10), "pepperoni", (x + px * s, y, z + pz * s), rot=(90, 0, 0), group=group)
+    m.add(ball(0.07 * s, 6, 4), "basil", (x + 0.1 * s, y - 0.1 * s, z + 0.65 * s), scale=(1.4, 0.6, 1), group=group)
+
+
 # ---------------------------------------------------------------------------
+
+def pizza_box():
+    m = Model("prop_pizza_box", "props", "Pizza box: stacks on the ambulance roof while you carry pizza orders.")
+    m.add(box(0.8, 0.8, 0.14, 0.02), "kraft", (0, 0, 0.07))
+    m.add(cyl(0.24, 0.02, 16), "red", (0, 0, 0.145))
+    m.add(prism([(0, -0.12), (0.1, 0.1), (-0.1, 0.1)], 0.02), "cheese", (0, 0, 0.16))
+    return m
+
+
+def palm():
+    m = Model("prop_palm", "props", "Beach palm with a curvy trunk and coconuts (breaks away).")
+    x = 0.0
+    for i in range(6):
+        z = 0.35 + i * 0.62
+        x = 0.05 * i * i
+        m.add(cyl(0.24 - i * 0.02, 0.66, 8, r2=0.22 - i * 0.02), "wood" if i % 2 else "trunk", (x, 0, z),
+              rot=(0, 6 + i * 3, 0))
+    top = (x + 0.1, 0, 3.85)
+    for i in range(7):
+        a = 360 * i / 7
+        m.add(prism([(0, -0.28), (1.7, 0), (0, 0.28), (-0.2, 0)], 0.08), "leaf" if i % 2 else "leaf2",
+              top, rot=(0, 30, a))
+    for i in range(3):
+        a = math.radians(120 * i)
+        m.add(ball(0.17, 8, 6), "darkbrown", (top[0] + 0.25 * math.cos(a), 0.25 * math.sin(a), top[2] - 0.2))
+    return m
+
+
+def beach_umbrella():
+    m = Model("prop_umbrella", "props", "Striped beach umbrella + towel (sends sand flying).")
+    m.add(box(1.0, 1.8, 0.03), "sky", (0.55, 0.2, 0.015))
+    m.add(cyl(0.04, 2.3, 6), "white", (0, 0, 1.15), rot=(8, 0, 0))
+    for i in range(8):
+        a = 360 * i / 8
+        m.add(prism([(0, 0), (1.25, -0.5), (1.25, 0.5)], 0.05), "pink" if i % 2 else "white",
+              (0, -0.15, 2.3), rot=(0, 16, a))
+    m.add(ball(0.08, 8, 6), "pink", (0, -0.15, 2.38))
+    return m
+
 
 def tree_pine():
     m = Model("prop_tree_pine", "props", "Tiered low-poly pine (reference style). Scale 0.7-1.3 for variety.")
@@ -173,4 +223,4 @@ def barrier():
 
 
 ALL = [tree_pine, tree_round, bush, lamp_post, bench, traffic_light, traffic_cone, hydrant,
-       trash_bin, guard_rail, fence, ramp, barrier]
+       trash_bin, guard_rail, fence, ramp, barrier, pizza_box, palm, beach_umbrella]
