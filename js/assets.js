@@ -10,10 +10,19 @@ export async function loadAssets(names, onProgress) {
   manifest = await (await fetch('assets/manifest.json')).json();
   const byName = Object.fromEntries(manifest.assets.map((a) => [a.name, a]));
   const loader = new GLTFLoader();
+  // Optional single-file bundle ({name: base64 GLB}) for hosts that can't serve .glb.
+  let bundle = null;
+  try {
+    const res = await fetch('assets/models.bundle.json');
+    if (res.ok) bundle = await res.json();
+  } catch (_) { /* no bundle: load individual GLBs */ }
+  const fromB64 = (b64) => Uint8Array.from(atob(b64), (ch) => ch.charCodeAt(0)).buffer;
   let done = 0;
   await Promise.all(names.map(async (n) => {
     if (!byName[n]) throw new Error(`asset ${n} missing from manifest`);
-    const gltf = await loader.loadAsync(`assets/${byName[n].file}`);
+    const gltf = bundle?.[n]
+      ? await loader.parseAsync(fromB64(bundle[n]), '')
+      : await loader.loadAsync(`assets/${byName[n].file}`);
     gltf.scene.traverse((o) => {
       if (o.isMesh) {
         o.castShadow = true;
