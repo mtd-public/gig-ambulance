@@ -24,18 +24,34 @@
         </svg>
         <div class="nav-txt"><span id="nav-label">PICKUP</span><span id="nav-dist">--</span></div>
       </div>
+      <div id="nav2" class="nav pizza none" aria-label="Direction to pizza stop">
+        <svg id="nav2-arrow" viewBox="-50 -50 100 100" width="40" height="40">
+          <circle r="46" class="ring"/>
+          <path d="M0,-36 L24,8 L8,4 L8,30 L-8,30 L-8,4 L-24,8 Z" class="arrow"/>
+        </svg>
+        <div class="nav-txt"><span>🍕</span><span id="nav2-dist">--</span></div>
+      </div>
       <div class="pill cash" id="hud-cash"><span class="lbl">$</span><span class="val">0</span></div>
     </div>
     <div class="fare" id="hud-fare">
       <div class="fare-row"><span id="fare-label">Find a patient!</span><span id="fare-timer"></span></div>
       <div class="bar"><div id="fare-bar"></div></div>
+      <div class="fare-row pizza-row" id="pizza-row"><span id="pizza-label">🍕 Grab pizzas at the orange beams</span><span id="pizza-timer"></span></div>
     </div>
     <div class="side">
       <div class="meter"><span>DMG</span><div class="bar v"><div id="dmg-bar"></div></div></div>
       <div class="meter"><span>SIREN</span><div class="bar v"><div id="boost-bar"></div></div></div>
     </div>
     <div id="toasts"></div>
-    <button id="pause-btn" aria-label="Pause">II</button>
+    <div class="corner-btns">
+      <button id="pause-btn" class="mini" aria-label="Pause">II</button>
+      <button id="rot-btn" class="mini" aria-label="Rotate camera 90 degrees" title="Rotate camera (Q / E)">⟳</button>
+    </div>
+    <div class="pad" aria-label="Driving buttons">
+      <button id="btn-boost" class="pbtn boost" aria-label="Siren boost">BOOST</button>
+      <button id="btn-brake" class="pbtn brake" aria-label="Brake">BRAKE</button>
+      <button id="btn-drift" class="pbtn drift" aria-label="Drift">DRIFT</button>
+    </div>
   </div>
 
   <div id="screen" class="screen">
@@ -44,9 +60,10 @@
       <p class="tag">Pick up patients. Rush them to the hospital. Don't spill the granny.</p>
       <ul class="how">
         <li><b>Left thumb</b> — drag the stick toward where you want to go</li>
-        <li><b>Right thumb</b> — hold for <b>SIREN RUSH</b> boost</li>
-        <li>Stop in the <span class="g">green beam</span> to load, the <span class="r">red beam</span> to deliver</li>
-        <li>Desktop: WASD / arrows, Space = boost</li>
+        <li><b>Right thumb</b> — <b>DRIFT</b> (handbrake slide), <b>BRAKE</b>, <b>BOOST</b></li>
+        <li>Stop in the <span class="g">green beam</span> to load a patient, then the <span class="r">red beam</span> at <i>their</i> hospital</li>
+        <li>Side gig: roll through <span class="o">orange beams</span> to grab pizzas (even mid-run!) and drop them at a pizzeria while hot</li>
+        <li>⟳ rotates the camera · Desktop: WASD, Space drift, X brake, Shift boost, Q/E rotate</li>
       </ul>
       <button id="start-btn" disabled>Loading…</button>
       <p class="small" id="load-status"></p>

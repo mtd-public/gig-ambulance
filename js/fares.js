@@ -11,8 +11,17 @@ const LINES = {
   char_patient_bandage: ['I bonked my head. Twice.', 'Hospital, pronto!'],
   char_pedestrian: ['Allergic reaction! Hurry!', 'I think I sprained… everything.'],
 };
-const ZONE_R = 3.2;
-const STOP_SPEED = 4.5;
+const ZONE_R = 6.5;
+const STOP_SPEED = 6;
+// Marker beams are authored ~2.3 m wide; scale them so the beam *is* the zone.
+export const BEAM_SCALE = ZONE_R / 2.3;
+export function scaleBeam(m, zone = ZONE_R) {
+  const k = zone / 2.3;
+  m.scale.set(k, 1, k);
+  const icon = m.getObjectByName('icon');
+  if (icon) icon.scale.set(1.5 / k, 1.5, 1.5 / k); // keep the floating icon round (and a bit bigger)
+  return m;
+}
 const WAITING = 3;
 
 // Crazy-Taxi loop: several patients wait around town; stop in a green beam to
@@ -22,31 +31,36 @@ export class Fares {
     this.scene = scene;
     this.town = town;
     this.waiting = [];
-    this.current = null; // {patient, dest, timeLeft, timeMax, crashes, fareBase}
-    this.hospital = town.dropoffSpots.find((s) => s.kind === 'hospital');
+    this.current = null; // {model, dest, timeLeft, timeMax, crashes, fareBase}
+    this.hospitals = town.dropoffSpots.filter((s) => s.kind === 'hospital');
+    this.hospital = this.hospitals[0];
     this.dropMarker = this._marker('marker_dropoff');
     this.dropMarker.visible = false;
-    this.doctor = spawn('char_doctor');
-    this.doctor.position.set(this.hospital.standX + 1.5, 0.18, this.hospital.standZ);
-    this.doctor.rotation.y = this.hospital.yaw;
-    scene.add(this.doctor);
+    this.doctors = this.hospitals.map((h) => {
+      const doc = spawn('char_doctor');
+      doc.position.set(h.standX + 1.5, 0.18, h.standZ);
+      doc.rotation.y = h.yaw;
+      scene.add(doc);
+      return doc;
+    });
     this.dwell = 0;
   }
 
   _marker(name) {
     const m = spawn(name);
+    scaleBeam(m);
     this.scene.add(m);
     return m;
   }
 
   fill(player) {
-    const used = new Set(this.waiting.map((w) => w.spot));
+    const busy = this.town.busy || (this.town.busy = new Set()); // shared with pizza orders
     while (this.waiting.length < WAITING) {
-      const spots = this.town.pickupSpots.filter((s) => !used.has(s)
-        && Math.hypot(s.x - player.pos.x, s.z - player.pos.z) > 22);
+      const spots = this.town.pickupSpots.filter((s) => !busy.has(s)
+        && Math.hypot(s.x - player.pos.x, s.z - player.pos.z) > 30);
       if (!spots.length) break;
       const spot = pick(spots);
-      used.add(spot);
+      busy.add(spot);
       const model = pick(PATIENTS);
       const who = spawn(model);
       who.position.set(spot.standX, 0.18, spot.standZ);
@@ -91,7 +105,8 @@ export class Fares {
     c.timeLeft -= dt;
     this.dropMarker.getObjectByName('icon').position.y = 3.4 + Math.sin(t * 3) * 0.3;
     this.dropMarker.getObjectByName('icon').rotation.y = t * 2;
-    this.doctor.position.y = 0.18 + Math.abs(Math.sin(t * 6)) * 0.12;
+    const doc = this.doctors[this.hospitals.indexOf(c.dest)];
+    if (doc) doc.position.y = 0.18 + Math.abs(Math.sin(t * 6)) * 0.12;
     if (c.timeLeft <= 0) {
       events.push({ type: 'fareFail', text: 'Patient took a rival ambulance!' });
       this._endFare(player);
@@ -106,11 +121,13 @@ export class Fares {
 
   _load(w, player, events) {
     this.waiting.splice(this.waiting.indexOf(w), 1);
+    this.town.busy.delete(w.spot);
     this.scene.remove(w.who); this.scene.remove(w.marker);
-    const dest = this.hospital;
+    // Each patient needs a particular hospital (their doctor is there) — not always the nearest.
+    const dest = pick(this.hospitals);
     const dist = Math.hypot(dest.x - w.spot.x, dest.z - w.spot.z);
-    // Manhattan-ish time budget: generous early, tight if you dawdle.
-    const timeMax = Math.round(8 + dist / 7.5);
+    // Manhattan-ish budget: roads are grid-aligned, so allow ~1.3x the straight line.
+    const timeMax = Math.round(10 + (dist * 1.3) / 11);
     this.current = { model: w.model, dest, timeLeft: timeMax, timeMax, crashes: 0, fareBase: Math.round(8 + dist * 0.22) };
     this.dropMarker.position.set(dest.x, 0, dest.z);
     this.dropMarker.visible = true;

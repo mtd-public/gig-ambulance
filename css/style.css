@@ -11,7 +11,7 @@
 html, body {
   margin: 0; height: 100%; overflow: hidden; background: var(--bg);
   font-family: "Trebuchet MS", "Avenir Next", system-ui, sans-serif; color: var(--ink);
-  user-select: none; -webkit-user-select: none; touch-action: none;
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none;
 }
 canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 #overlay { pointer-events: none; }
@@ -48,7 +48,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 .fare-row { display: flex; justify-content: space-between; font-size: 15px; }
 .bar { height: 8px; background: #e7def8; border-radius: 6px; overflow: hidden; margin-top: 4px; }
 .bar > div { height: 100%; width: 0; background: var(--green); transition: width .1s linear; }
-.side { position: absolute; right: 12px; top: 140px; display: flex; gap: 8px; }
+.side { position: absolute; left: 12px; top: 200px; display: flex; gap: 8px; }
 .meter { display: flex; flex-direction: column; align-items: center; font-size: 10px; font-weight: 800; gap: 3px; }
 .bar.v { width: 12px; height: 90px; display: flex; align-items: flex-end; border: 2px solid var(--ink); }
 .bar.v > div { width: 100%; height: 0; transition: height .1s linear; }
@@ -65,11 +65,30 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 @keyframes toast { 0% { transform: scale(.4); opacity: 0 } 12% { transform: scale(1.1); opacity: 1 }
   20% { transform: scale(1) } 80% { opacity: 1 } 100% { transform: translateY(-30px); opacity: 0 } }
 
-#pause-btn {
-  pointer-events: auto; position: absolute; right: 12px; bottom: max(14px, env(safe-area-inset-bottom));
-  width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--ink); background: #fffdf8;
-  font-weight: 900; color: var(--ink);
+.corner-btns { position: absolute; right: 12px; top: calc(max(10px, env(safe-area-inset-top)) + 150px);
+  display: flex; flex-direction: column; gap: 10px; }
+.mini {
+  pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--ink);
+  background: #fffdf8; font-weight: 900; font-size: 18px; color: var(--ink); box-shadow: 0 3px 0 var(--ink);
 }
+.mini:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+
+/* right-thumb driving pad */
+.pad { position: absolute; right: 14px; bottom: max(18px, env(safe-area-inset-bottom)); width: 190px; height: 190px; }
+.pbtn {
+  pointer-events: auto; position: absolute; border-radius: 50%; border: 3px solid var(--ink);
+  font: inherit; font-weight: 900; color: var(--ink); letter-spacing: .5px; box-shadow: 0 4px 0 var(--ink);
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.pbtn.down { transform: translateY(3px) scale(.96); box-shadow: 0 1px 0 var(--ink); filter: brightness(1.08); }
+.pbtn.drift { right: 0; bottom: 0; width: 96px; height: 96px; background: var(--yellow); font-size: 17px; }
+.pbtn.brake { right: 104px; bottom: 6px; width: 74px; height: 74px; background: #ffc4cc; font-size: 13px; }
+.pbtn.boost { right: 10px; bottom: 106px; width: 74px; height: 74px; font-size: 13px;
+  background: linear-gradient(#8fb4ff, #ff8a98); }
+.pizza-row { font-size: 13px; margin-top: 4px; color: #b35f12; }
+.nav.pizza .arrow { fill: #ffa23f; }
+.nav.pizza #nav2-dist { color: #b35f12; }
+.card .o { color: #e07b12; font-weight: 800; }
 
 .screen {
   position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
@@ -82,7 +101,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 .card h1 { margin: 0; font-size: 44px; line-height: .95; letter-spacing: 1px; color: var(--purple); }
 .card h1 span { color: var(--red); }
 .card .tag { font-weight: 700; margin: 10px 0; }
-.card .how { text-align: left; padding-left: 18px; margin: 8px 0 14px; font-size: 14px; line-height: 1.45; }
+.card .how { text-align: left; padding-left: 18px; margin: 8px 0 14px; font-size: 13.5px; line-height: 1.45; }
 .card .g { color: #1f9d58; font-weight: 800; } .card .r { color: var(--red); font-weight: 800; }
 .card button {
   font: inherit; font-weight: 900; font-size: 22px; padding: 12px 28px; border-radius: 16px;

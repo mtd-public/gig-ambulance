@@ -1,21 +1,19 @@
 import { spawn } from './assets.js';
+import { LANES } from './town.js';
 import { pick } from './utils.js';
 
 export const PICKUP_ASSETS = ['pu_turbo', 'pu_repair', 'pu_time', 'pu_magnet', 'pu_heart', 'pu_coin', 'pu_star',
-  'pu_shield', 'prop_cone', 'prop_hydrant', 'prop_bin', 'prop_barrier', 'prop_bench'];
+  'pu_shield'];
 const POWER_TYPES = ['pu_turbo', 'pu_turbo', 'pu_repair', 'pu_time', 'pu_magnet', 'pu_heart', 'pu_star', 'pu_shield'];
-const SMASHABLE = ['prop_cone', 'prop_cone', 'prop_hydrant', 'prop_bin', 'prop_barrier'];
 
-// Spinning power-ups on the roads, breadcrumb coin lines, and knock-overable props.
+// Spinning power-ups on the roads and breadcrumb coin lines.
 export class Pickups {
   constructor(scene, town) {
     this.scene = scene;
     this.town = town;
     this.items = [];
-    this.props = [];
-    for (let i = 0; i < 9; i++) this._spawnPower();
-    for (let i = 0; i < 7; i++) this._spawnCoinLine();
-    for (const [x, z] of town.propSpots) this._spawnProp(x, z);
+    for (let i = 0; i < 16; i++) this._spawnPower();
+    for (let i = 0; i < 12; i++) this._spawnCoinLine();
     this.magnet = 0;
   }
 
@@ -23,8 +21,8 @@ export class Pickups {
     const cell = pick(this.town.roadCells);
     const d = pick([...cell.conn]);
     const [dx, dz] = { E: [1, 0], N: [0, -1], W: [-1, 0], S: [0, 1] }[d];
-    const lane = (Math.random() < 0.5 ? -1 : 1) * 1.25;
-    return { x: cell.x + dx * 2 + -dz * lane, z: cell.z + dz * 2 + dx * lane, dx, dz };
+    const lane = (Math.random() < 0.5 ? -1 : 1) * pick(LANES);
+    return { x: cell.x + dx * 3 + -dz * lane, z: cell.z + dz * 3 + dx * lane, dx, dz };
   }
 
   _add(type, x, z, respawn) {
@@ -38,16 +36,7 @@ export class Pickups {
 
   _spawnCoinLine() {
     const p = this._roadPoint();
-    for (let i = 0; i < 5; i++) this._add('pu_coin', p.x + p.dx * i * 1.6, p.z + p.dz * i * 1.6, null);
-  }
-
-  _spawnProp(x, z) {
-    const type = pick(SMASHABLE);
-    const mesh = spawn(type);
-    mesh.position.set(x, 0.18, z);
-    mesh.rotation.y = Math.random() * Math.PI;
-    this.scene.add(mesh);
-    this.props.push({ type, mesh, x, z, r: type === 'prop_barrier' ? 0.9 : 0.45, hit: false, t: 0 });
+    for (let i = 0; i < 5; i++) this._add('pu_coin', p.x + p.dx * i * 2, p.z + p.dz * i * 2, null);
   }
 
   update(dt, t, player, events) {
@@ -81,36 +70,12 @@ export class Pickups {
         events.push({ type: 'power', kind: it.type, x: it.x, z: it.z });
       }
     }
-    if (coinsLeft < 15) this._spawnCoinLine();
+    if (coinsLeft < 30) this._spawnCoinLine();
     this.items = this.items.filter((it) => {
       if (it.alive || it.respawn) return true;
       this.scene.remove(it.mesh);
       return false;
     });
 
-    for (const pr of this.props) {
-      if (pr.hit) {
-        pr.t += dt;
-        pr.vy -= 22 * dt;
-        pr.mesh.position.x += pr.vx * dt; pr.mesh.position.z += pr.vz * dt;
-        pr.mesh.position.y = Math.max(0, pr.mesh.position.y + pr.vy * dt);
-        if (pr.mesh.position.y === 0) { pr.vx *= 0.9; pr.vz *= 0.9; pr.spin *= 0.9; pr.vy = Math.abs(pr.vy) * 0.3; }
-        pr.mesh.rotation.x += pr.spin * dt; pr.mesh.rotation.z += pr.spin * 0.7 * dt;
-        if (pr.t > 20) { // tidy up and put it back
-          pr.hit = false; pr.mesh.position.set(pr.x, 0.18, pr.z); pr.mesh.rotation.set(0, Math.random() * 3, 0);
-        }
-        continue;
-      }
-      const d = Math.hypot(p.x - pr.x, p.z - pr.z);
-      if (d < pr.r + player.radius && player.speed > 3) {
-        pr.hit = true; pr.t = 0;
-        const s = player.speed;
-        pr.vx = player.vel.x * 1.1 + (Math.random() - 0.5) * 3;
-        pr.vz = player.vel.y * 1.1 + (Math.random() - 0.5) * 3;
-        pr.vy = 5 + s * 0.35;
-        pr.spin = (Math.random() < 0.5 ? -1 : 1) * (6 + s * 0.4);
-        events.push({ type: 'smashProp', kind: pr.type, x: pr.x, z: pr.z });
-      }
-    }
   }
 }

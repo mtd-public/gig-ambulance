@@ -9,7 +9,7 @@ with a virtual thumbstick, as in
 ![Prototype](docs/screenshots/prototype.png)
 
 - **Game design spec:** [DESIGN.md](DESIGN.md)
-- **3D models:** 53 procedural chibi low-poly GLBs built with Blender, in
+- **3D models:** 61 procedural chibi low-poly GLBs built with Blender, in
   [`assets/models`](assets/models). Previews are in
   [`assets/previews`](assets/previews) (see the `sheet_*.png` contact sheets).
 
@@ -27,13 +27,17 @@ Then open `http://localhost:8080`.
 
 **Controls**
 - **Left thumb:** drag the floating stick toward where you want to go on
-  screen. Release to brake.
-- **Right thumb:** hold for **Siren Rush** boost.
-- **Desktop:** WASD or arrow keys to steer, Space to boost.
+  screen. Release to coast.
+- **Right thumb:** **DRIFT** (handbrake slide), **BRAKE** and **BOOST** buttons.
+- **⟳:** rotate the camera 90°.
+- **Desktop:** WASD or arrow keys to steer, Space drift, X brake, Shift boost,
+  Q/E rotate.
 
-Stop inside a **green beam** to load a patient, and inside the **red beam** at
-the hospital to deliver. The arrow at the top of the screen always points to
-your next stop.
+Stop inside a **green beam** to load a patient, then inside the **red beam** at
+*their* hospital (there are three). On the side, roll through **orange beams**
+to grab pizzas (up to 3, even mid-run) and drop them at a pizzeria while
+they're hot. The top compasses point to your next patient stop and your next
+pizza stop.
 
 ## Rebuild the models
 

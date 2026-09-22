@@ -2,6 +2,7 @@
 and bobs the whole node. Bright, emissive-accented, readable from the iso camera."""
 
 from assets_characters import red_cross
+from assets_props import pizza_slice_at
 from kit import FACING, Model, ball, box, cone, cyl, dome, heart_pts, prism, star_pts, torus
 
 Z = 1.1  # hover height of icon centre
@@ -109,4 +110,11 @@ def marker_dropoff():
                    "beacon_red", "beam_red", icon)
 
 
-ALL = [turbo, repair, time_bonus, magnet, heart, coin, star, shield, marker_pickup, marker_dropoff]
+def marker_pizza():
+    def icon(m):
+        pizza_slice_at(m, 0, 0, 2.75, 0.9, group="icon")
+    return _marker("marker_pizza", "Pizza zone: orange beam + spinning slice. Roll through (no full stop needed).",
+                   "beacon_orange", "beam_orange", icon)
+
+
+ALL = [turbo, repair, time_bonus, magnet, heart, coin, star, shield, marker_pickup, marker_dropoff, marker_pizza]
