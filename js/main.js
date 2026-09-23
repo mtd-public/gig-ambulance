@@ -320,7 +320,7 @@ function loop(now) {
     const target = fares.target;
     guide.visible = !!target && playing;
     if (target) {
-      guide.position.set(player.pos.x, player.y + 3.6 + Math.sin(t * 4) * 0.15, player.pos.z);
+      guide.position.set(player.pos.x, player.y + 5.4 + Math.sin(t * 4) * 0.15, player.pos.z);
       guide.rotation.y = Math.atan2(target.x - player.pos.x, target.z - player.pos.z);
       const col = target.kind === 'drop' ? 0xff5468 : 0x56e27d;
       guide.userData.mat.color.setHex(col); guide.userData.mat.emissive.setHex(col);

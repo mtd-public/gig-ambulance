@@ -171,6 +171,9 @@ export function makeGuideArrow() {
   head.position.z = 0.85;
   head.scale.set(1, 1, 0.35);
   g.add(shaft, head);
+  // Always draw on top so the van (lights, pizza stack) can never swallow it.
+  mat.depthTest = false;
+  g.traverse((o) => { o.renderOrder = 20; });
   g.userData.mat = mat;
   return g;
 }
